@@ -1,6 +1,6 @@
 # Linux 桌面版在 Clash 系统代理下无法回复，CLI 正常
 
-这是一份待提交草稿，记录的是 2026-10-08 的情况。提交前请确认最新版仍能复现，并补充订阅类型和「关于」页面的版本。
+已于 2026-10-09 提交至官方：[openai/codex #52378](https://github.com/openai/codex/issues/52378)。以下记录 2026-10-08 的验证情况；桌面版本来自安装包元数据，没有声称已经验证后续版本。
 
 ## 环境
 
@@ -8,8 +8,8 @@
 - 桌面程序：ChatGPT 26.930.61225（安装包元数据），使用 Codex 本地桌面对话。
 - 桌面自带 Codex：0.160.1。
 - 代理：Clash Verge，HTTP/mixed 端口为 `127.0.0.1:7897`。
-- 订阅类型：提交前填写。
-- 平台详细信息：提交前运行 `uname -mprs` 后填写。
+- 订阅类型：Pro（用户确认）。
+- 平台详细信息：`Linux 7.0.0-34-generic x86_64 x86_64`（2026-10-09 读取 `uname -mprs`）。
 
 ## 实际情况
 
@@ -34,10 +34,10 @@
 
 在 TUN 关闭时，命令重启后的真实本地桌面对话已成功，后台 TCP 连接经过 `127.0.0.1:7897`。但独立菜单冷启动登录状态尚未完整验证，云端 durable 连接仍有 `ETIMEDOUT` / `1006`；这两部分不声称已经修复，也不能由临时办法有效就断定准确根因。
 
-相关讨论：[Linux 代理问题](https://github.com/openai/codex/issues/16079)、[durable 连接问题](https://github.com/openai/codex/issues/49829)。前者的主报告连 CLI 也失败，和这里的桌面分支并不完全一样。
+完整配置：[chatgpt-clash-linux](https://github.com/ZXCYFR/chatgpt-clash-linux)。相关讨论：[Linux CLI 代理问题](https://github.com/openai/codex/issues/16079)、[macOS 后台代理问题](https://github.com/openai/codex/issues/49921)、[macOS 界面代理问题](https://github.com/openai/codex/issues/34955)、[durable 连接问题](https://github.com/openai/codex/issues/49829)。它们涉及不同平台或网络路径，本报告补充原生 Linux 的本地桌面对话对照结果。
 
-## 官方提交入口
+## 官方反馈
 
-使用 [Codex App Bug 表单](https://github.com/openai/codex/issues/new?template=1-codex-app.yml)。官方模板要求先检查重复问题；若已有同样报告，按其说明给现有问题添加 👍，避免重复建 Issue。
+报告链接：[openai/codex #52378](https://github.com/openai/codex/issues/52378)。这里保存复现说明，后续讨论与处理状态以官方 Issue 为准。
 
-提交时附上独立项目链接和必要的脱敏错误信息即可，无需上传账号文件、Cookie 或整个日志目录。
+新反馈入口为 [Codex App Bug 表单](https://github.com/openai/codex/issues/new?template=1-codex-app.yml)。官方模板要求先检查重复问题。此次只附公开项目和必要的错误信息，没有上传账号文件、Cookie 或整个日志目录。

@@ -66,6 +66,6 @@ rm -- "$HOME/.local/bin/chatgpt-clash" \
 
 ## 反馈
 
-[复现步骤与官方 Bug 反馈草稿](docs/bug-report.md)记录了现象、对照结果和已知限制。也可以参考已发布的[桌面代理经验](https://github.com/openai/codex/issues/16079#issuecomment-6060269712)和[云端连接补充](https://github.com/openai/codex/issues/49829#issuecomment-6060300596)。
+[官方 Bug 报告 #52378](https://github.com/openai/codex/issues/52378)已提交。[复现说明](docs/bug-report.md)记录了现象、对照结果和已知限制。也可以参考已发布的[桌面代理经验](https://github.com/openai/codex/issues/16079#issuecomment-6060269712)和[云端连接补充](https://github.com/openai/codex/issues/49829#issuecomment-6060300596)。
 
 本项目只包含启动脚本、菜单模板和说明，不包含桌面应用本身。使用 MIT 许可证。
