@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=ChatGPT Clash
+Comment=通过 Clash 系统代理启动 ChatGPT
+Exec=@LAUNCHER@ %U
+Icon=chatgpt
+Type=Application
+StartupNotify=true
+Categories=Utility;
+Actions=ReloadProxy;
+
+[Desktop Action ReloadProxy]
+Name=重启并应用代理
+Exec=@LAUNCHER@ --restart

@@ -1,0 +1,8 @@
+.env
+.env.*
+*.log
+*.sqlite*
+auth.json
+node_modules/
+.DS_Store
+*.swp

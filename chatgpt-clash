@@ -1,0 +1,51 @@
+#!/bin/sh
+set -eu
+
+# 给桌面主进程及其后台传入与终端相同的代理。
+proxy_url='http://127.0.0.1:7897'
+export HTTP_PROXY="$proxy_url" HTTPS_PROXY="$proxy_url" ALL_PROXY="$proxy_url"
+export http_proxy="$proxy_url" https_proxy="$proxy_url" all_proxy="$proxy_url"
+# 保留内网与本机服务的直连。
+export NO_PROXY='localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
+export no_proxy="$NO_PROXY"
+
+if [ "${1-}" = '--check-proxy' ]; then
+    exec /usr/lib/chatgpt/resources/codex doctor --json
+fi
+
+if [ "${1-}" = '--restart' ]; then
+    shift
+    # 只关闭桌面主进程，不触碰终端的独立 Codex 服务。
+    desktop_pids=''
+    for task_pid in $(pgrep -x ChatGPT || true); do
+        task_exe=$(readlink "/proc/$task_pid/exe" 2>/dev/null || true)
+        [ "$task_exe" = '/usr/lib/chatgpt/ChatGPT' ] || continue
+        if tr '\0' '\n' < "/proc/$task_pid/cmdline" | grep -Eq '(^|[[:space:]])--type='; then
+            continue
+        fi
+        desktop_pids="$desktop_pids $task_pid"
+    done
+    for task_pid in $desktop_pids; do
+        kill -TERM "$task_pid" 2>/dev/null || true
+    done
+    task_wait=0
+    while [ "$task_wait" -lt 20 ]; do
+        still_running=0
+        for task_pid in $desktop_pids; do
+            if kill -0 "$task_pid" 2>/dev/null; then still_running=1; fi
+        done
+        [ "$still_running" -eq 0 ] && break
+        sleep 1
+        task_wait=$((task_wait + 1))
+    done
+    if [ "$task_wait" -ge 20 ]; then
+        zenity --error --title='ChatGPT 代理配置' --text='桌面版尚未退出。请保存正在进行的工作，完全退出 ChatGPT 后再打开。'
+        exit 1
+    fi
+fi
+
+# 脱离终端运行；应用自身已保存并轮转日志，避免重复追加一份。
+nohup /usr/bin/chatgpt \
+    --proxy-server="$proxy_url" \
+    '--proxy-bypass-list=<local>;localhost;127.0.0.1;[::1];10.0.0.0/8;172.16.0.0/12;192.168.0.0/16' \
+    "$@" > /dev/null 2>&1 < /dev/null &
